@@ -1,5 +1,5 @@
 import express from "express";
-import { getPayloadClient } from "@/get-payload";
+import { getPayloadClient } from "./get-payload";
 import { nextApp, nextHandler } from "./next-utils";
 
 const app = express();
