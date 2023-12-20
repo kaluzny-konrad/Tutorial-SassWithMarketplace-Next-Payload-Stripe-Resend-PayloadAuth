@@ -13,6 +13,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/Icons";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
+import { trpc } from "@/trpc/client";
 
 type Props = {};
 
@@ -24,6 +25,8 @@ export default function page({}: Props) {
   } = useForm<TAuthCredentialsValidator>({
     resolver: zodResolver(AuthCredentialsValidator),
   });
+
+  const {} = trpc;
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
     // mutate({ email, password })
