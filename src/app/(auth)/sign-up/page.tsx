@@ -14,6 +14,9 @@ import { Icons } from "@/components/Icons";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import { trpc } from "@/trpc/client";
+import { toast } from "sonner";
+import { ZodError } from "zod";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -26,7 +29,30 @@ export default function page({}: Props) {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const { mutate: createPayloadUser, isLoading } = trpc.auth.createPayloadUser.useMutation({});
+  const router = useRouter();
+
+  const { mutate: createPayloadUser, isLoading } =
+    trpc.auth.createPayloadUser.useMutation({
+      onError: (error) => {
+        if (error.data?.code === "CONFLICT") {
+          toast.error("User already exists");
+
+          return;
+        }
+
+        if (error instanceof ZodError) {
+          toast.error(error.issues[0].message);
+
+          return;
+        }
+
+        toast.error("Something went wrong");
+      },
+      onSuccess: ({ sentToEmail }) => {
+        toast.success(`Verification email sent to ${sentToEmail}`);
+        router.push(`/verify-email?to=${sentToEmail}`)
+      },
+    });
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
     createPayloadUser({ email, password });
