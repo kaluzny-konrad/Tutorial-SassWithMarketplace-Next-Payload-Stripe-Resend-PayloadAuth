@@ -16,11 +16,24 @@ import { ArrowRightIcon } from "lucide-react";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { ZodError } from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {};
 
 export default function page({}: Props) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const isSeller = searchParams.get("as") === "seller";
+  const origin = searchParams.get("origin");
+
+  const continueAsSeller = () => {
+    router.push("?as=seller");
+  };
+
+  const continueAsBuyer = () => {
+    router.replace("sign-in", undefined);
+  };
+
   const {
     register,
     handleSubmit,
@@ -29,31 +42,40 @@ export default function page({}: Props) {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const router = useRouter();
+  const { mutate: signIn, isLoading } = trpc.auth.signIn.useMutation({
+    onSuccess: () => {
+      toast.success("Signed in successfully");
 
-  const { mutate: signUp, isLoading } =
-    trpc.auth.signUp.useMutation({
-      onError: (error) => {
-        if (error.data?.code === "CONFLICT") {
-          toast.error("User already exists");
-          return;
-        }
+      if (origin) {
+        router.push(origin);
+        return;
+      }
 
-        if (error instanceof ZodError) {
-          toast.error(error.issues[0].message);
-          return;
-        }
+      if (isSeller) {
+        router.push("/sell");
+        return;
+      }
 
-        toast.error("Something went wrong");
-      },
-      onSuccess: ({ sentToEmail }) => {
-        toast.success(`Verification email sent to ${sentToEmail}`);
-        router.push(`/verify-email?to=${sentToEmail}`)
-      },
-    });
+      router.push("/");
+      router.refresh();
+    },
+    onError: (error) => {
+      if (error.data?.code === "UNAUTHORIZED") {
+        toast.error("Invalid email or password.");
+        return;
+      }
+
+      if (error instanceof ZodError) {
+        toast.error(error.issues[0].message);
+        return;
+      }
+
+      toast.error("Something went wrong");
+    },
+  });
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
-    signUp({ email, password });
+    signIn({ email, password });
   };
 
   return (
@@ -63,7 +85,7 @@ export default function page({}: Props) {
           <div className="flex flex-col items-center space-y-2 text-center">
             <Icons.logo className="h-20 w-20" />
             <h1 className="text-2xl font-semibold tracking-tight">
-              Create an account
+              Sign in to your {isSeller && "seller"} account
             </h1>
 
             <Link
@@ -71,9 +93,9 @@ export default function page({}: Props) {
                 variant: "link",
                 className: "gap-1.5",
               })}
-              href="/sign-in"
+              href="/sign-up"
             >
-              Already have an account? Sign-in
+              Don&apos;t have an account? Sign-up
               <ArrowRightIcon className="h-4 w-4" />
             </Link>
           </div>
@@ -114,9 +136,41 @@ export default function page({}: Props) {
                   )}
                 </div>
 
-                <Button>Sign up</Button>
+                <Button>Sign in</Button>
               </div>
             </form>
+
+            <div className="relative">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <span className="w-full border-t"></span>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  or
+                </span>
+              </div>
+            </div>
+
+            {isSeller ? (
+              <Button
+                onClick={continueAsBuyer}
+                variant={"secondary"}
+                disabled={isLoading}
+              >
+                Continue as customer
+              </Button>
+            ) : (
+              <Button
+                onClick={continueAsSeller}
+                variant={"secondary"}
+                disabled={isLoading}
+              >
+                Continue as seller
+              </Button>
+            )}
           </div>
         </div>
       </div>

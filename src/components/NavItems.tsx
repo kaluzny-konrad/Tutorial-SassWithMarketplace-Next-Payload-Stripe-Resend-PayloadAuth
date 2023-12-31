@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { PRODUCT_CATEGORIES } from "@/config";
 import NavItem from "./NavItem";
-import { useOnClickOutside } from "@/hooks/src/hooks/use-on-click-outside";
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 
 type Props = {};
 
