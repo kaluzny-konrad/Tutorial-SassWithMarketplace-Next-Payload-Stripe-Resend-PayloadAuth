@@ -2,6 +2,9 @@ import { CollectionConfig } from "payload/types";
 
 export const Users: CollectionConfig = {
   slug: "users",
+  admin: {
+    hidden: ({ user }) => user?.role !== "admin",
+  },
   auth: {
     verify: {
       generateEmailHTML: ({ token }) => {
