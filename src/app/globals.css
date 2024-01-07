@@ -57,3 +57,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+.swiper-pagination-bullet {
+  width: 7px !important;
+  height: 7px !important;
+  background: rgba(255, 255, 255, 0.2);
+  scale: 0.9 !important;
+  border-radius: 9999px;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.swiper-pagination-bullet-active {
+  color: #fff;
+  background: #fff !important;
+  scale: 1 !important;
+}
