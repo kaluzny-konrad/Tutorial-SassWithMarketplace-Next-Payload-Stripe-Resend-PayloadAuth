@@ -27,11 +27,17 @@ export default function PaymentStatus({ orderEmail, orderId, isPaid }: Props) {
     }
   }, [data?.isPaid, router]);
 
-  return <div>
-    <h1>Payment status</h1>
-    <p>Order ID: {orderId}</p>
-    <p>Order email: {orderEmail}</p>
-    <p>Is paid: {isPaid ? "yes" : "no"}</p>
-    {data?.isPaid && <p>Order is paid!</p>}
-  </div>;
+  return (
+    <div className="mt-16 grid grid-cols-2 gap-x-4 text-sm text-gray-600">
+      <div>
+        <p className="font-medium text-gray-900">Shipping To</p>
+        <p>{orderEmail}</p>
+      </div>
+
+      <div>
+        <p className="font-medium text-gray-900">Order Status</p>
+        <p>{isPaid ? "Payment successful" : "Pending payment"}</p>
+      </div>
+    </div>
+  );
 }
