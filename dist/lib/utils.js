@@ -50,7 +50,7 @@ function constructMetadata(_a) {
             description: description,
             images: [image],
             creator: '@tutorialfromyt',
-        }, icons: icons, metadataBase: new URL('http://localhost:3000/') }, (noIndex && {
+        }, icons: icons, metadataBase: new URL('https://tutorial-marketplace-virid.vercel.app') }, (noIndex && {
         robots: {
             index: false,
             follow: false,
