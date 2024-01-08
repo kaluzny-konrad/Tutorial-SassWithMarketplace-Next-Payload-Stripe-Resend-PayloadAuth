@@ -63,12 +63,12 @@ export default function ProductReel({ title, subtitle, href, query }: Props) {
           </Link>
         )}
       </div>
-      
+
       <div className="relative">
         <div className="flex items-center w-full mt-6">
           <div className="grid w-full grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
             {products.map((product, index) => (
-              <ProductListing product={product} index={index} />
+              <ProductListing product={product} index={index} key={`product-${index}`} />
             ))}
           </div>
         </div>
