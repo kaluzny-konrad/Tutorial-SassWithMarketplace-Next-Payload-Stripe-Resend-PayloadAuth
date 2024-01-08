@@ -1,15 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        hostname: "localhost",
-        pathname: "**",
-        port: "3000",
-        protocol: "http",
-      },
-    ],
-  },
+		remotePatterns: [
+			{
+				protocol: "http",
+				hostname: "localhost",
+			},
+			{
+				protocol: "https",
+				hostname: "tutorial-marketplace-virid.vercel.app",
+			},
+		],
+	},
 };
 
 module.exports = nextConfig;
