@@ -4,14 +4,18 @@ import { Loader2Icon } from "lucide-react";
 
 type Props = {
   isMounted: boolean;
-  isDisabled: boolean;
+  isLoading: boolean;
+  itemsLength: number;
   cartTotal: number;
+  handleCheckout: () => void;
 };
 
 export default function ShoppingCartSummary({
   isMounted,
-  isDisabled,
+  itemsLength,
+  isLoading,
   cartTotal,
+  handleCheckout,
 }: Props) {
   const fee = 1;
 
@@ -58,12 +62,12 @@ export default function ShoppingCartSummary({
 
       <div className="mt-6">
         <Button
-          disabled={!isMounted || isDisabled}
-          onClick={() => {}}
+          disabled={!isMounted || itemsLength === 0 || isLoading}
+          onClick={() => handleCheckout()}
           className="w-full"
           size="lg"
         >
-          {false ? (
+          {isLoading ? (
             <Loader2Icon className="w-4 h-4 animate-spin mr-1.5" />
           ) : null}
           Checkout

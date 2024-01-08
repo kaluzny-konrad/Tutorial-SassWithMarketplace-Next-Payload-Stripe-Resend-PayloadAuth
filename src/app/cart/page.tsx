@@ -6,11 +6,14 @@ import ShoppingCartSummary from "@/components/ShoppingCartSummary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/trpc/client";
+import { useRouter } from "next/navigation";
+
 import { useEffect, useState } from "react";
 
 type Props = {};
 
-export default function page({}: Props) {
+export default function CartPage({}: Props) {
   const { items } = useCart();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -23,6 +26,17 @@ export default function page({}: Props) {
     (total, { product }) => total + product.price,
     0
   );
+
+  const router = useRouter();
+
+  const { mutate: createCheckoutSession, isLoading } =
+    trpc.payment.createSession.useMutation({
+      onSuccess: ({ url }) => {
+        if (url) router.push(url);
+      },
+    });
+
+  const productIds = items.map(({ product }) => product.id);
 
   return (
     <div className="bg-white">
@@ -68,8 +82,10 @@ export default function page({}: Props) {
 
           <ShoppingCartSummary
             isMounted={isMounted}
+            isLoading={isLoading}
+            itemsLength={items.length}
             cartTotal={cartTotal}
-            isDisabled={items.length === 0}
+            handleCheckout={() => createCheckoutSession({ productIds })}
           />
         </div>
       </div>

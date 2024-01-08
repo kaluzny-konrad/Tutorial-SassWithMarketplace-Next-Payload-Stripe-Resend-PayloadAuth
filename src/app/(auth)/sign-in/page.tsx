@@ -20,7 +20,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {};
 
-export default function page({}: Props) {
+export default function SignInPage({}: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const isSeller = searchParams.get("as") === "seller";

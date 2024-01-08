@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {};
 
-export default function page({}: Props) {
+export default function SignUpPage({}: Props) {
   const {
     register,
     handleSubmit,

@@ -8,7 +8,7 @@ type Props = {
   };
 };
 
-export default function page({ searchParams }: Props) {
+export default function VerifyEmailPage({ searchParams }: Props) {
   const token = searchParams.token;
   const toEmail = searchParams.to;
 

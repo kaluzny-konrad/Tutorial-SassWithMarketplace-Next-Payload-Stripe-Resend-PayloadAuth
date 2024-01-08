@@ -29,7 +29,7 @@ const BREADCRUMBS = [
   },
 ];
 
-export default async function page({ params }: Props) {
+export default async function ProductPage({ params }: Props) {
   const { productId } = params;
 
   const payload = await getPayloadClient();
