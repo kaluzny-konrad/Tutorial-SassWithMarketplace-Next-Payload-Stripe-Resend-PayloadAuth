@@ -59,7 +59,7 @@ export function constructMetadata({
       creator: '@tutorialfromyt',
     },
     icons,
-    metadataBase: new URL('http://localhost:3000/'),
+    metadataBase: new URL('https://tutorial-marketplace-virid.vercel.app'),
     ...(noIndex && {
       robots: {
         index: false,
